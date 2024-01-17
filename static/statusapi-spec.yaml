@@ -911,7 +911,7 @@ paths:
             type: string
         - name: to
           in: query
-          description: Retrieve the events till Date (yyyy-MM-dd format).
+          description: Retrieve the announcements till Date (yyyy-MM-dd format).
           schema:
             type: string
             format: date     

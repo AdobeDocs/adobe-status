@@ -4,6 +4,33 @@ info:
   description: >
     This guide will help you complete the setup needed to call Status API's. <br /><br />
     
+    ### To make an API call from frontend services, you can follow these general guidelines:
+
+    - Identify the API endpoint that you want to call.
+    
+    - Create a service that will make the API call.
+    
+    - Use a library like fetch, Angular HttpClient, or React Axios to make the API call in your frontend service.
+    
+    - Add valid `Authorization` header and `api_key` as param to make a successful call.
+    
+    - To avoid exposing API key, use a proxy setup in your backend server and process the API through it.
+    
+    - These are the CORS headers allowed while connecting from frontend services ‘Authorization,Content-Type,X-Api-Key,User-Agent,If-Modified-Since’.
+    
+    
+    ### To make an API call from backend services, you can follow these general guidelines:
+
+    - Identify the API endpoint that you want to call.
+    
+    - Create a service that will make the API call.
+    
+    - Choose an HTTP client library that is compatible with the programming language you are using to make the API call.
+    
+    - Add valid `Authorization` header and `api_key` as param to make a successful call.
+    
+    ### Note: Domain-level restriction is not applicable for the API as long as the appropriate authentication header and API key passed
+    
     The following sections contain sample code snippets for generating tokens. Once the setup is complete, you can find the API specs under Events and Registry. 
     All the API's have CLI, Javascript and NodeJS code request samples. <br /><br />
     

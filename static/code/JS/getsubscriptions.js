@@ -1,7 +1,7 @@
 const myHeaders = new Headers();
 myHeaders.append("Authorization", "Bearer <token>");
+myHeaders.append("x-user-token", "<user_token>");
 const API_KEY = '<key>';
-const IMS_TOKEN = '<ims_token>'
 
 const requestOptions = {
     method: 'GET',
@@ -9,7 +9,7 @@ const requestOptions = {
     redirect: 'follow'
 };
 
-fetch(`https://status.adobe.io/api/v1/subscriptions?api_key=${API_KEY}&ims_token=${IMS_TOKEN}`, requestOptions)
+fetch(`https://status.adobe.io/api/v1/subscriptions?api_key=${API_KEY}`, requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));

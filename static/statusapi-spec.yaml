@@ -164,7 +164,7 @@ tags:
     description: Query and view the product taxonomy of Adobe Products and Services.
   - name: Subscriptions
     description: >-
-      Subscribe to Adobe Products and Offerings to receive notifications for ongoing events, incidents, and maintenance impacting them.
+      Subscribe to Adobe Products and Offerings to receive email notifications about ongoing events, incidents, and maintenance impacting them.
 paths:
   /api/v1/clouds:
     get:
@@ -1047,22 +1047,30 @@ paths:
         - Subscriptions
       summary: Subscription Catalog
       description: |
-        List all products available for subscription and their details.
+        List all products available for subscription with their details.
         
-        In the Response, each Product has id, name, product offerings (if any), regions and event types.
-        > Exception: Two products, Acrobat Sign and Adobe Marketo Engage have extra detail - regions in product offerings to show the regions specific to each offering.
-        In this case the value of regions at product level is the list of all the regions of all the offerings.
+        In the response, each Product has id, name, product offerings (if any), regions and event types.
+        > Exception: For three products, Acrobat Sign, Adobe Connect and Adobe Marketo Engage, 
+        subscriptions are managed at environment level instead of regions.
+         The attribute "regions" will have environment values for these products.<br /> As all offerings might not be available in all environments, the product offerings(if any) will have an extra detail named regions which has environment values specific to the offering.
       operationId: subscriptionCatalogUsingGET
       parameters:
-        - name: productNames
+        - name: productIds
           in: query
-          description: List of product names for which you want to retrieve the details.
+          description: List of product ids for which details are to be retrieved.
           style: form
           explode: true
           schema:
             type: array
             items:
               type: string
+        - name: productName
+          in: query
+          description: Partial or complete product name for which details are to be retrieved..
+          style: form
+          explode: true
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -1107,7 +1115,7 @@ paths:
         - Subscriptions
       summary: Get Subscriptions
       description: >-
-        List all products subscribed by the user and the details specific to the subscription.
+        List all products that the user is subscribed to, with the details specific to the subscription.
       operationId: subscriptionsUsingGET
       responses:
         '200':
@@ -1137,14 +1145,14 @@ paths:
       security:
         - Authorization: [ ]
           api_key: [ ]
-          ims_token: [ ]
+          user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
             curl --location --request GET
-            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>&productNames=<string>&imsToken=<user_ims>' \
-            --header 'Authorization: Bearer <token>'
+            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>&productNames=<string>' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/getsubscriptions.js}
@@ -1156,29 +1164,24 @@ paths:
         - Subscriptions
       summary: Update Subscriptions
       description: |
-        Add new subscriptions or update(replace) existing subscriptions.
+        Update user's subscriptions.<br /> Any product with no existing subscription is considered as a new subscription.<br /> Any product with an existing subscription is considered as a modification and the existing subscription is replaced as per the details in the request.
+                             
+        For every product subscription, id, product offerings(if any), regions and event types are to be sent in the request .              
+        Any existing subscriptions for the products which are not sent in the request will remain unchanged.
         
-        All existing subscriptions after the update are sent as response.                     
-        For every product subscription, user needs to send id, product offerings(if any), regions and event types.                                    
-        If any of product offerings/regions/event types is not given, the subscription is defaulted to all available values for that attribute.              
-        Any existing subscriptions for the products which are not given in the payload will remain unchanged.                
-        Any existing subscriptions for the products which are given the payload will be replaced as per the details in the payload. 
-        > Note: The payload structure is same for all the products including Acrobat Sign and Adobe Marketo Engage.
+        > Note: The payload structure is same for all the products including Acrobat Sign, Adobe Connect and Adobe Marketo Engage.
       operationId: subscriptionsUsingPOST
       requestBody:
-        description: Request body containing details of subscriptions to be updated or added.
+        description: Request body containing details of subscriptions to be added or modified.
         required: true  # Marking the body as required
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SubscriptionRequest'
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionCatalog'
+        '201':
+          description: CREATED
+          content: {}
         '400':
           description: Bad Request
           content: {}
@@ -1200,15 +1203,15 @@ paths:
       security:
         - Authorization: [ ]
           api_key: [ ]
-          ims_token: [ ]
+          user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
             curl --location --request POST
-            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>&imsToken=<user_ims>' \
+            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>' \
             --header 'Content-Type: application/json' \
-            --header 'Authorization: Bearer <token>' --data-raw <json_payload>
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>' --data-raw <json_payload>
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/postsubscriptions.js}
@@ -1220,12 +1223,12 @@ paths:
         - Subscriptions
       summary: Delete Subscriptions
       description: >-
-        Delete all subscriptions of the user or subscriptions on specific products.
+        Delete subscriptions on specific products or all subscriptions of the user.
       operationId: subscriptionsUsingDELETE
       parameters:
         - name: productIds
           in: query
-          description: List of product ids for which you want to unsubscribe. If not provided, all subscriptions will be removed.
+          description: List of product ids for which the user should be unsubscribed. If not provided, all subscriptions will be removed.
           style: form
           explode: true
           schema:
@@ -1257,14 +1260,14 @@ paths:
       security:
         - Authorization: [ ]
           api_key: [ ]
-          ims_token: [ ]
+          user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
             curl --location --request DELETE
-            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>&productIds=<string>&imsToken=<user_ims>' \
-            --header 'Authorization: Bearer <token>'
+            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>&productIds=<string>' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/deletesubscriptions.js}
@@ -2171,7 +2174,9 @@ components:
       description: Use the api key `StatusAdobeIOClient`
       name: api_key
       in: query
-    ims_token:
-      description: Use the ims token of User
-      name: ims_token
-      in: query
+    user_token:
+      type: apiKey
+      description: >-
+        [To generate token for user-specific access](https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/implementation/)
+      name: x-user-token
+      in: header

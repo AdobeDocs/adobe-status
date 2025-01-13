@@ -1,8 +1,7 @@
 const request = require('request');
 
 const API_KEY = '<key>';
-const IMS_TOKEN = '<ims_token>';
-const url = `https://status.adobe.io/api/v1/subscriptions?api_key=${API_KEY}&ims_token=${IMS_TOKEN}`;
+const url = `https://status.adobe.io/api/v1/subscriptions?api_key=${API_KEY}`;
 
 const postData = '<json_payload>';
 
@@ -11,6 +10,7 @@ const options = {
     'url': url,
     'headers': {
         'Authorization': 'Bearer <token>',
+        'x-user-token': '<user_token>',
         'Content-Type': 'application/json'
     },
     body: postData

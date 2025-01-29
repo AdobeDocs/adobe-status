@@ -1181,7 +1181,10 @@ paths:
       responses:
         '201':
           description: CREATED
-          content: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionUpdateResponse'
         '400':
           description: Bad Request
           content: {}
@@ -2162,6 +2165,28 @@ components:
           type: array
           items:
             type: string
+    SubscriptionProductOverview:
+      title: SubscriptionProductOverview
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    SubscriptionUpdateResponse:
+      title: SubscriptionUpdateResponse
+      type: object
+      properties:
+        subscriptionsCreated:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/SubscriptionProductOverview'
+        subscriptionsModified:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/SubscriptionProductOverview'
   securitySchemes:
     Authorization:
       description: >-

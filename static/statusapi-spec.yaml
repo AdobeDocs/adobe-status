@@ -10,7 +10,7 @@ info:
     If you chose to use Postman to call the Status API's, please see the section 'Postman Collection'. It has downloadable collection files that you can use to get started. <br /><br />
     
     You will need OAuth token and API key to call Status API's. Please find the sample code below.<br />
-        
+    
     <SecurityDefinitions />
 
 
@@ -50,7 +50,7 @@ info:
 
 
     const get_access_token = async auth_code => {
-      
+    
       return await axios ({
         method: 'post',
         url: REQUEST_URL,
@@ -162,6 +162,9 @@ tags:
       future maintenance, that will impact Adobe Products and Services.
   - name: Registry
     description: Query and view the product taxonomy of Adobe Products and Services.
+  - name: Subscriptions
+    description: >-
+      Subscribe to Adobe Products and Offerings to receive email notifications about ongoing events, incidents, and maintenance impacting them.
 paths:
   /api/v1/clouds:
     get:
@@ -1038,6 +1041,242 @@ paths:
         - lang: JavaScript
           label: NodeJS
           source: {$ref: code/Node/messagesbylocale.js}
+  /api/v1/subscriptionCatalog:
+    get:
+      tags:
+        - Subscriptions
+      summary: Subscription Catalog
+      description: |
+        List all products available for subscription with their details.
+        
+        In the response, each Product has id, name, product offerings (if any), regions and event types.
+        > Exception: For three products, Acrobat Sign, Adobe Connect and Adobe Marketo Engage, 
+        subscriptions are managed at environment level instead of regions.
+         The attribute "regions" will have environment values for these products.<br /> As all offerings might not be available in all environments, the product offerings(if any) will have an extra detail named regions which has environment values specific to the offering.
+      operationId: subscriptionCatalogUsingGET
+      parameters:
+        - name: productIds
+          in: query
+          description: List of product ids for which details are to be retrieved.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: productName
+          in: query
+          description: Partial or complete product name for which details are to be retrieved..
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionCatalog'
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '429':
+          description: Too Many Requests
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request GET
+            'https://status.adobe.io/api/v1/subscriptionCatalog?api_key=<key>&productNames=<string>' \
+            --header 'Authorization: Bearer <token>'
+        - lang: JavaScript
+          label: JavaScript
+          source: {$ref: code/JS/subscriptioncatalog.js}
+        - lang: JavaScript
+          label: NodeJS
+          source: {$ref: code/Node/subscriptioncatalog.js}
+  /api/v1/subscriptions:
+    get:
+      tags:
+        - Subscriptions
+      summary: Get Subscriptions
+      description: >-
+        List all products that the user is subscribed to, with the details specific to the subscription.
+      operationId: subscriptionsUsingGET
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionCatalog'
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '429':
+          description: Too Many Requests
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          user_token: [ ]
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request GET
+            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>&productNames=<string>' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>'
+        - lang: JavaScript
+          label: JavaScript
+          source: {$ref: code/JS/getsubscriptions.js}
+        - lang: JavaScript
+          label: NodeJS
+          source: {$ref: code/Node/getsubscriptions.js}
+    post:
+      tags:
+        - Subscriptions
+      summary: Update Subscriptions
+      description: |
+        Update user's subscriptions.<br /> Any product with no existing subscription is considered as a new subscription.<br /> Any product with an existing subscription is considered as a modification and the existing subscription is replaced as per the details in the request.
+                             
+        For every product subscription, id, product offerings(if any), regions and event types are to be sent in the request .              
+        Any existing subscriptions for the products which are not sent in the request will remain unchanged.
+        
+        > Note: The payload structure is same for all the products including Acrobat Sign, Adobe Connect and Adobe Marketo Engage.
+      operationId: subscriptionsUsingPOST
+      requestBody:
+        description: Request body containing details of subscriptions to be added or modified.
+        required: true  # Marking the body as required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionUpdateResponse'
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '429':
+          description: Too Many Requests
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          user_token: [ ]
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request POST
+            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>' \
+            --header 'Content-Type: application/json' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>' --data-raw <json_payload>
+        - lang: JavaScript
+          label: JavaScript
+          source: {$ref: code/JS/postsubscriptions.js}
+        - lang: JavaScript
+          label: NodeJS
+          source: {$ref: code/Node/postsubscriptions.js}
+    delete:
+      tags:
+        - Subscriptions
+      summary: Delete Subscriptions
+      description: >-
+        Delete subscriptions on specific products or all subscriptions of the user.
+      operationId: subscriptionsUsingDELETE
+      parameters:
+        - name: productIds
+          in: query
+          description: List of product ids for which the user should be unsubscribed. If not provided, all subscriptions will be removed.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content: { }
+        '400':
+          description: Bad Request
+          content: { }
+        '401':
+          description: Unauthorized
+          content: { }
+        '403':
+          description: Forbidden
+          content: { }
+        '404':
+          description: Not Found
+          content: { }
+        '429':
+          description: Too Many Requests
+          content: { }
+        '500':
+          description: Internal Server Error
+          content: { }
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          user_token: [ ]
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request DELETE
+            'https://status.adobe.io/api/v1/subscriptions?api_key=<key>&productIds=<string>' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>'
+        - lang: JavaScript
+          label: JavaScript
+          source: {$ref: code/JS/deletesubscriptions.js}
+        - lang: JavaScript
+          label: NodeJS
+          source: {$ref: code/Node/deletesubscriptions.js}
 components:
   schemas:
     Cloud:
@@ -1844,6 +2083,147 @@ components:
           type: string
         name:
           type: string
+    SubscriptionCatalog:
+      title: SubscriptionCatalog
+      type: object
+      properties:
+        products:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubscriptionProduct'
+          example:
+            "productId1":
+              id: "productId1"
+              name: "Product 1"
+              offeringId1:
+                id: "offeringId1"
+                name: "Offering 1"
+                regions:
+                  regionId1:
+                    id: "regionId1"
+                    name: "Region 1"
+                eventTypes:
+                  eventId1:
+                    id: "eventId1"
+                    name: "Event Type 1"
+            "productId2":
+              id: "productId2"
+              name: "Product 2"
+              offeringId21:
+                id: "offeringId21"
+                name: "Offering 21"
+                regions:
+              regions:
+                regionId21:
+                  id: "regionId21"
+                  name: "Region 21"
+              eventTypes:
+                eventTypeId1:
+                  id: "eventId1"
+                  name: "Event Type 1"
+    SubscriptionProduct:
+      title: SubscriptionProduct
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        productOfferings:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubscriptionProductOffering'
+        regions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubscriptionProductRegion'
+        eventTypes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubscriptionProductEventType'
+    SubscriptionProductOffering:
+      title: SubscriptionProductOffering
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        regions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubscriptionProductRegion'
+    SubscriptionProductRegion:
+      title: SubscriptionProductRegion
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    SubscriptionProductEventType:
+      title: SubscriptionProductEventType
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    SubscriptionRequest:
+      title: SubscriptionRequest
+      type: object
+      properties:
+        products:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubscriptionRequestProduct'
+          example:
+            "productId1":
+              id: "productId1"
+              name: "Product 1"
+              productOfferings: ["offeringId1", "offeringId2"]
+              regions: ["regionId1", "regionId2"]
+              eventTypes: ["eventTypeId1", "eventTypeId2"]
+    SubscriptionRequestProduct:
+      title: SubscriptionRequestProduct
+      type: object
+      properties:
+        id:
+          type: string
+        productOfferings:
+          type: array
+          items:
+            type: string
+        regions:
+          type: array
+          items:
+            type: string
+        eventTypes:
+          type: array
+          items:
+            type: string
+    SubscriptionProductOverview:
+      title: SubscriptionProductOverview
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    SubscriptionUpdateResponse:
+      title: SubscriptionUpdateResponse
+      type: object
+      properties:
+        subscriptionsCreated:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/SubscriptionProductOverview'
+        subscriptionsModified:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/SubscriptionProductOverview'
   securitySchemes:
     Authorization:
       description: >-
@@ -1856,3 +2236,9 @@ components:
       description: Use the api key `StatusAdobeIOClient`
       name: api_key
       in: query
+    user_token:
+      type: apiKey
+      description: >-
+        [To generate token for user-specific access](https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/implementation/)
+      name: x-user-token
+      in: header

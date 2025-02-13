@@ -2091,6 +2091,36 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/SubscriptionProduct'
+          example:
+            "productId1":
+              id: "productId1"
+              name: "Product 1"
+              offeringId1:
+                id: "offeringId1"
+                name: "Offering 1"
+                regions:
+                  regionId1:
+                    id: "regionId1"
+                    name: "Region 1"
+                eventTypes:
+                  eventId1:
+                    id: "eventId1"
+                    name: "Event Type 1"
+            "productId2":
+              id: "productId2"
+              name: "Product 2"
+              offeringId21:
+                id: "offeringId21"
+                name: "Offering 21"
+                regions:
+              regions:
+                regionId21:
+                  id: "regionId21"
+                  name: "Region 21"
+              eventTypes:
+                eventTypeId1:
+                  id: "eventId1"
+                  name: "Event Type 1"
     SubscriptionProduct:
       title: SubscriptionProduct
       type: object
@@ -2147,6 +2177,13 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/SubscriptionRequestProduct'
+          example:
+            "productId1":
+              id: "productId1"
+              name: "Product 1"
+              productOfferings: ["offeringId1", "offeringId2"]
+              regions: ["regionId1", "regionId2"]
+              eventTypes: ["eventTypeId1", "eventTypeId2"]
     SubscriptionRequestProduct:
       title: SubscriptionRequestProduct
       type: object

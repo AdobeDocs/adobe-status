@@ -162,9 +162,12 @@ tags:
       future maintenance, that will impact Adobe Products and Services.
   - name: Registry
     description: Query and view the product taxonomy of Adobe Products and Services.
-  - name: Subscriptions
+  - name: Product Subscriptions
     description: >-
-      Proactively subscribe to receive email notifications about Adobe Cloud Products and Services incidents and maintenance events
+      Proactively subscribe to receive notifications about Adobe Cloud Products and Services incidents and maintenance events.
+  - name: Event Subscriptions
+    description: >-
+      Subscribe to incidents and maintenance events on Adobe Cloud Products and Services to receive notifications.
 paths:
   /api/v1/clouds:
     get:
@@ -1044,7 +1047,7 @@ paths:
   /api/v1/subscriptionCatalog:
     get:
       tags:
-        - Subscriptions
+        - Product Subscriptions
       summary: Subscription Catalog
       description: |
         List all products available for subscription with their details.
@@ -1112,7 +1115,7 @@ paths:
   /api/v1/subscriptions:
     get:
       tags:
-        - Subscriptions
+        - Product Subscriptions
       summary: Get Subscriptions
       description: >-
         List all products that the user is subscribed to, with the details specific to the subscription.
@@ -1161,7 +1164,7 @@ paths:
           source: {$ref: code/Node/getsubscriptions.js}
     post:
       tags:
-        - Subscriptions
+        - Product Subscriptions
       summary: Update Subscriptions
       description: |
         Update user's subscriptions.
@@ -1221,7 +1224,7 @@ paths:
           source: {$ref: code/Node/postsubscriptions.js}
     delete:
       tags:
-        - Subscriptions
+        - Product Subscriptions
       summary: Delete Subscriptions
       description: >-
         Delete specific product subscriptions or all subscriptions for the user
@@ -1278,6 +1281,253 @@ paths:
         - lang: JavaScript
           label: NodeJS
           source: {$ref: code/Node/deletesubscriptions.js}
+  /api/v1/all-ongoing-events:
+    get:
+      tags:
+        - Event Subscriptions
+      summary: All Ongoing Events
+      description: >-
+        List all ongoing events (Issues and Maintenances) grouped by unique event and product combination.
+      operationId: allOngoingEventsUsingGET
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllOngoingEvents'
+        '400':
+          description: Bad Request
+          content: { }
+        '401':
+          description: Unauthorized
+          content: { }
+        '403':
+          description: Forbidden
+          content: { }
+        '404':
+          description: Not Found
+          content: { }
+        '429':
+          description: Too Many Requests
+          content: { }
+        '500':
+          description: Internal Server Error
+          content: { }
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request GET
+            'https://status.adobe.io/api/v1/all-ongoing-events?api_key=<key>' \
+            --header 'Authorization: Bearer <token>'
+        - lang: JavaScript
+          label: JavaScript
+          source: { $ref: code/JS/getAllOngoingEvents.js }
+        - lang: JavaScript
+          label: NodeJS
+          source: { $ref: code/Node/getAllOngoingEvents.js }
+  /api/v1/event-subscriptions:
+    get:
+      tags:
+        - Event Subscriptions
+      summary: Get Event Subscriptions
+      description: >-
+        List all Events that the user is subscribed to.
+      operationId: eventSubscriptionsUsingGET
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscriptionsResponse'
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '429':
+          description: Too Many Requests
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          user_token: [ ]
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request GET
+            'https://status.adobe.io/api/v1/event-subscriptions?api_key=<key>' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>'
+        - lang: JavaScript
+          label: JavaScript
+          source: {$ref: code/JS/getEventSubscriptions.js}
+        - lang: JavaScript
+          label: NodeJS
+          source: {$ref: code/Node/getEventSubscriptions.js}
+    post:
+      tags:
+        - Event Subscriptions
+      summary: Add Event Subscriptions
+      description: |
+        Add new event subscription for the user.
+      operationId: eventSubscriptionsUsingPOST
+      parameters:
+        - name: eventId
+          in: query
+          description: eventId of the event.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: productId
+          in: query
+          description: Product id of the event.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsDefaultResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                InvalidEvent:
+                  summary: No event exists for EventId and ProductId combination
+                  value:
+                    status: "INVALID_EVENT"
+                    message: "No event found."
+                ExpiredEvent:
+                  summary: The event is no longer active
+                  value:
+                    status: "INACTIVE_EVENT"
+                    message: "No active event found."
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+        '429':
+          description: Too Many Requests
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          user_token: [ ]
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request POST
+            'https://status.adobe.io/api/v1/event-subscriptions?api_key=<key>&productId=<productId>&eventId=<eventId>' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>'
+        - lang: JavaScript
+          label: JavaScript
+          source: {$ref: code/JS/postEventSubscriptions.js}
+        - lang: JavaScript
+          label: NodeJS
+          source: {$ref: code/Node/postEventSubscriptions.js}
+    delete:
+      tags:
+        - Event Subscriptions
+      summary: Delete Event Subscriptions
+      description: >-
+        Delete specific event subscription for the user.
+      operationId: eventSubscriptionsUsingDELETE
+      parameters:
+        - name: eventId
+          in: query
+          description: eventId of the event.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: productId
+          in: query
+          description: Product id of the event.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsDefaultResponse'
+        '400':
+          description: Bad Request
+          content: { }
+        '401':
+          description: Unauthorized
+          content: { }
+        '403':
+          description: Forbidden
+          content: { }
+        '404':
+          description: Not Found
+          content: { }
+        '429':
+          description: Too Many Requests
+          content: { }
+        '500':
+          description: Internal Server Error
+          content: { }
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          user_token: [ ]
+      x-codeSamples:
+        - lang: cURL
+          label: CLI
+          source: >-
+            curl --location --request DELETE
+            'https://status.adobe.io/api/v1/event-subscriptions?api_key=<key>&eventId=<eventId>&productId=<productId>' \
+            --header 'Authorization: Bearer <token>' --header 'x-user-token: <user_token>'
+        - lang: JavaScript
+          label: JavaScript
+          source: {$ref: code/JS/deleteEventSubscriptions.js}
+        - lang: JavaScript
+          label: NodeJS
+          source: {$ref: code/Node/deleteEventSubscriptions.js}
 components:
   schemas:
     Cloud:
@@ -2256,6 +2506,324 @@ components:
           type: string
         message:
           type: string
+    EventSubscription:
+      title: EventSubscription
+      type: object
+      properties:
+        eventId:
+          type: string
+        products:
+          type: array
+          items:
+            type: string
+    EventSubscriptionsResponse:
+      title: EventSubscriptionsResponse
+      type: object
+      properties:
+        subscriptions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EventSubscription'
+          example:
+            - eventId: "eventId1"
+              products:
+                - "productId11"
+                - "productId12"
+            - eventId: "eventId2"
+              products:
+                - "productId21"
+                - "productId22"
+    AllOngoingEvents:
+      title: AllOngoingEvents
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/OngoingEvent'
+          example:
+            - eventId: "eventId1"
+              productId: "productId11"
+              eventType: "Maintenance"
+              product: {
+                history:[
+                  {
+                    "message": "message1",
+                    "title": "title1",
+                    "messageTime": "YYYY-MM-DDTHH:MM:SS",
+                    "id": "CommunicationId1",
+                    "status": "Started",
+                    "cmrStatus": "Started",
+                    "messageType": "Canned",
+                    "customerImpact": "High",
+                    "operationsImpact": "Performance",
+                    "messageToken": "message.token",
+                    "titleToken": "title.token",
+                    "serviceImpact": {
+                      "productOfferings": [
+                        "offeringId1",
+                        "offeringId2" ],
+                      "productServices": [
+                        "serviceId1" ]
+                    },
+                    "locationImpact": {
+                      "serviceEnvironments": [
+                        "environmentId1",
+                        "environmentId2" ],
+                      "serviceRegions": [
+                        "Americas"
+                      ]
+                    },
+                    "showEnvironment": false,
+                    "scheduledDate": null,
+                    "startedOn": null,
+                    "completedOn": null
+                  },
+                  {
+                    "message": "message1",
+                    "title": "title1",
+                    "messageTime": "YYYY-MM-DDTHH:MM:SS",
+                    "id": "CommunicationId1",
+                    "status": "Reminder",
+                    "cmrStatus": "Reminder",
+                    "messageType": "Canned",
+                    "customerImpact": "High",
+                    "operationsImpact": "Performance",
+                    "messageToken": "message.token",
+                    "titleToken": "title.token",
+                    "serviceImpact": {
+                      "productOfferings": [
+                        "offeringId1",
+                        "offeringId2" ],
+                      "productServices": [
+                        "serviceId1" ]
+                    },
+                    "locationImpact": {
+                      "serviceEnvironments": [
+                        "environmentId1",
+                        "environmentId2" ],
+                      "serviceRegions": [
+                        "Americas"
+                      ]
+                    },
+                    "showEnvironment": false,
+                    "scheduledDate": null,
+                    "startedOn": null,
+                    "completedOn": null
+                  }
+                ],
+                "id": "productId11",
+                "name": "ProductName11"
+              }
+            - eventId: "eventId2"
+              productId: "productId21"
+              eventType: "Incident"
+              product: {
+                history: [
+                  {
+                    "message": "message1",
+                    "title": "title1",
+                    "messageTime": "YYYY-MM-DDTHH:MM:SS",
+                    "id": "CommunicationId1",
+                    "status": "Started",
+                    "cmrStatus": "Started",
+                    "messageType": "Canned",
+                    "customerImpact": "High",
+                    "operationsImpact": "Performance",
+                    "messageToken": "message.token",
+                    "titleToken": "title.token",
+                    "serviceImpact": {
+                      "productOfferings": [
+                        "offeringId1",
+                        "offeringId2" ],
+                      "productServices": [
+                        "serviceId1" ]
+                    },
+                    "locationImpact": {
+                      "serviceEnvironments": [
+                        "environmentId1",
+                        "environmentId2" ],
+                      "serviceRegions": [
+                        "Americas"
+                      ]
+                    },
+                    "showEnvironment": false,
+                    "scheduledDate": null,
+                    "startedOn": null,
+                    "completedOn": null
+                  },
+                  {
+                    "message": "message1",
+                    "title": "title1",
+                    "messageTime": "YYYY-MM-DDTHH:MM:SS",
+                    "id": "CommunicationId1",
+                    "status": "Reminder",
+                    "cmrStatus": "Reminder",
+                    "messageType": "Canned",
+                    "customerImpact": "High",
+                    "operationsImpact": "Performance",
+                    "messageToken": "message.token",
+                    "titleToken": "title.token",
+                    "serviceImpact": {
+                      "productOfferings": [
+                        "offeringId1",
+                        "offeringId2" ],
+                      "productServices": [
+                        "serviceId1" ]
+                    },
+                    "locationImpact": {
+                      "serviceEnvironments": [
+                        "environmentId1",
+                        "environmentId2" ],
+                      "serviceRegions": [
+                        "Americas"
+                      ]
+                    },
+                    "showEnvironment": false,
+                    "scheduledDate": null,
+                    "startedOn": null,
+                    "completedOn": null
+                  }
+                ],
+                "id": "productId21",
+                "name": "ProductName21"
+              }
+            - eventId: "eventId2"
+              productId: "productId22"
+              eventType: "Incident"
+              product: {
+                history: [
+                  {
+                    "message": "message1",
+                    "title": "title1",
+                    "messageTime": "YYYY-MM-DDTHH:MM:SS",
+                    "id": "CommunicationId1",
+                    "status": "Started",
+                    "cmrStatus": "Started",
+                    "messageType": "Canned",
+                    "customerImpact": "High",
+                    "operationsImpact": "Performance",
+                    "messageToken": "message.token",
+                    "titleToken": "title.token",
+                    "serviceImpact": {
+                      "productOfferings": [
+                        "offeringId1",
+                        "offeringId2" ],
+                      "productServices": [
+                        "serviceId1" ]
+                    },
+                    "locationImpact": {
+                      "serviceEnvironments": [
+                        "environmentId1",
+                        "environmentId2" ],
+                      "serviceRegions": [
+                        "Americas"
+                      ]
+                    },
+                    "showEnvironment": false,
+                    "scheduledDate": null,
+                    "startedOn": null,
+                    "completedOn": null
+                  },
+                  {
+                    "message": "message1",
+                    "title": "title1",
+                    "messageTime": "YYYY-MM-DDTHH:MM:SS",
+                    "id": "CommunicationId1",
+                    "status": "Reminder",
+                    "cmrStatus": "Reminder",
+                    "messageType": "Canned",
+                    "customerImpact": "High",
+                    "operationsImpact": "Performance",
+                    "messageToken": "message.token",
+                    "titleToken": "title.token",
+                    "serviceImpact": {
+                      "productOfferings": [
+                        "offeringId1",
+                        "offeringId2" ],
+                      "productServices": [
+                        "serviceId1" ]
+                    },
+                    "locationImpact": {
+                      "serviceEnvironments": [
+                        "environmentId1",
+                        "environmentId2" ],
+                      "serviceRegions": [
+                        "Americas"
+                      ]
+                    },
+                    "showEnvironment": false,
+                    "scheduledDate": null,
+                    "startedOn": null,
+                    "completedOn": null
+                  }
+                ],
+                "id": "productId22",
+                "name": "ProductName22"
+              }
+    OngoingEvent:
+        title: OngoingEvent
+        type: object
+        properties:
+          eventId:
+            type: string
+          productId:
+            type: string
+          eventType:
+            type: string
+          product:
+            type: EventProduct
+    EventProduct:
+      title: EventProduct
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventProductHistoryDto'
+        id:
+          type: string
+        name:
+          type: string
+    EventProductHistoryDto:
+      title: EventProductHistoryDto
+      type: object
+      properties:
+        message:
+          type: string
+        title:
+          type: string
+        messageTime:
+          type: string
+        id:
+          type: string
+        status:
+          type: string
+        cmrStatus:
+          type: string
+        messageType:
+          type: string
+        customerImpact:
+          type: string
+        operationsImpact:
+          type: string
+        messageToken:
+          type: string
+        titleToken:
+          type: string
+        serviceImpact:
+          $ref: '#/components/schemas/ImpactedServices'
+        locationImpact:
+          $ref: '#/components/schemas/LocationImpact'
+        showEnvironment:
+          type: boolean
+        scheduledDate:
+          type: string
+        startedOn:
+          type: string
+        completedOn:
+          type: string
+
   securitySchemes:
     Authorization:
       description: >-

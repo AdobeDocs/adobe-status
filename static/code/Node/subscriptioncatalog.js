@@ -3,7 +3,7 @@ const API_KEY = '<key>';
 
 const options = {
     'method': 'GET',
-    'url': `https://status.adobe.io/api/v1/subscriptioncatalog?api_key=${API_KEY}&productNames=<string>`,
+    'url': `https://status.adobe.io/api/v1/subscription-catalog?api_key=${API_KEY}&productNames=<string>`,
     'headers': {
         'Authorization': 'Bearer <token>'
     }

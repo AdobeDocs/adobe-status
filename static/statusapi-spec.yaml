@@ -167,7 +167,7 @@ tags:
       Proactively subscribe to receive notifications about Adobe Cloud Products and Services incidents and maintenance events.
   - name: Event Subscriptions
     description: >-
-      Subscribe to incidents and maintenance events on Adobe Cloud Products and Services to receive notifications.
+      Subscribe to ongoing incidents and maintenance events on Adobe Cloud Products and Services to receive notifications.
 paths:
   /api/v1/clouds:
     get:
@@ -1176,7 +1176,7 @@ paths:
         - lang: JavaScript
           label: NodeJS
           source: {$ref: code/Node/messagesbylocale.js}
-  /api/v1/subscriptionCatalog:
+  /api/v1/subscription-catalog:
     get:
       tags:
         - Product Subscriptions
@@ -1236,7 +1236,7 @@ paths:
           label: CLI
           source: >-
             curl --location --request GET
-            'https://status.adobe.io/api/v1/subscriptionCatalog?api_key=<key>&productNames=<string>' \
+            'https://status.adobe.io/api/v1/subscription-catalog?api_key=<key>&productNames=<string>' \
             --header 'Authorization: Bearer <token>'
         - lang: JavaScript
           label: JavaScript
@@ -1419,8 +1419,18 @@ paths:
         - Event Subscriptions
       summary: All Ongoing Events
       description: >-
-        List all ongoing events (Issues and Maintenances) grouped by unique event and product combination.
+        List all ongoing issues and maintenances grouped by unique event and the products impacted by the event.
       operationId: allOngoingEventsUsingGET
+      parameters:
+        - name: productIds
+          in: query
+          description: List of product ids for which events are to be retrieved.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: OK
@@ -1468,7 +1478,7 @@ paths:
         - Event Subscriptions
       summary: Get Event Subscriptions
       description: >-
-        List all Events that the user is subscribed to.
+        List all events that the user is subscribed to.
       operationId: eventSubscriptionsUsingGET
       responses:
         '200':
@@ -1517,7 +1527,7 @@ paths:
         - Event Subscriptions
       summary: Add Event Subscriptions
       description: |
-        Add new event subscription for the user.
+        Add a new event subscription for the user.
       operationId: eventSubscriptionsUsingPOST
       parameters:
         - name: eventId
@@ -2972,17 +2982,17 @@ components:
                 "name": "ProductName22"
               }
     OngoingEvent:
-        title: OngoingEvent
-        type: object
-        properties:
-          eventId:
-            type: string
-          productId:
-            type: string
-          eventType:
-            type: string
-          product:
-            type: EventProduct
+      title: OngoingEvent
+      type: object
+      properties:
+        eventId:
+          type: string
+        productId:
+          type: string
+        eventType:
+          type: string
+        product:
+          type: EventProduct
     EventProduct:
       title: EventProduct
       type: object
@@ -3049,6 +3059,7 @@ components:
     user_token:
       type: apiKey
       description: >-
-        [To generate token for user-specific access](https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/implementation/)
+        [To generate token for user-specific 
+        access](https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/implementation/)
       name: x-user-token
       in: header

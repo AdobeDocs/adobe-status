@@ -427,6 +427,18 @@ paths:
           schema:
             type: string
             format: date
+        - name: updateStart
+          in: query
+          description: Retrieve the events updated from updateStart timestamp (Unix epoch seconds).
+          schema:
+            type: integer
+            format: int64
+        - name: updateEnd
+          in: query
+          description: Retrieve the events updated before updateEnd timestamp (Unix epoch seconds).
+          schema:
+            type: integer
+            format: int64
         - name: eventTypes
           in: query
           description: List of eventTypes for which you want to retrieve the events.
@@ -439,9 +451,15 @@ paths:
             type: string
         - name: status
           in: query
-          description: Status of event which you want to retrieve the events.
+          description: Retrieve the events with the given status.
           schema:
-            type: enum
+            type: string
+            enum:
+              - Opened
+              - Closed
+              - Scheduled
+              - Started
+              - Completed
       responses:
         '200':
           description: OK
@@ -472,7 +490,7 @@ paths:
           label: CLI
           source: >-
             curl --location --request GET
-            'https://status.adobe.io/api/v1/events?api_key=<key>&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>' \
+            'https://status.adobe.io/api/v1/events?api_key=<key>&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&updateStart=<epoch>&updateEnd=<epoch>' \
             --header 'Authorization: Bearer <token>'
         - lang: JavaScript
           label: JavaScript
@@ -571,9 +589,12 @@ paths:
             type: string
         - name: status
           in: query
-          description: Status of event which you want to retrieve the events.
+          description: Retrieve the incidents with the given status.
           schema:
-            type: enum
+            type: string
+            enum:
+              - Opened
+              - Closed
       responses:
         '200':
           description: OK
@@ -703,9 +724,13 @@ paths:
             type: string
         - name: status
           in: query
-          description: Status of event which you want to retrieve the maintenance.
+          description: Retrieve the maintenance with the given status.
           schema:
-            type: enum
+            type: string
+            enum:
+              - Scheduled
+              - Started
+              - Completed
       responses:
         '200':
           description: OK

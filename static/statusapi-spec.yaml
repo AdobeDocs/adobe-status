@@ -577,6 +577,18 @@ paths:
           schema:
             type: string
             format: date
+        - name: updateStart
+          in: query
+          description: Retrieve the events updated from updateStart timestamp (Unix epoch seconds).
+          schema:
+            type: integer
+            format: int64
+        - name: updateEnd
+          in: query
+          description: Retrieve the events updated before updateEnd timestamp (Unix epoch seconds).
+          schema:
+            type: integer
+            format: int64
         - name: eventTypes
           in: query
           description: List of eventTypes for which you want to retrieve the events.
@@ -717,6 +729,18 @@ paths:
           schema:
             type: string
             format: date
+        - name: updateStart
+          in: query
+          description: Retrieve the events updated from updateStart timestamp (Unix epoch seconds).
+          schema:
+            type: integer
+            format: int64
+        - name: updateEnd
+          in: query
+          description: Retrieve the events updated before updateEnd timestamp (Unix epoch seconds).
+          schema:
+            type: integer
+            format: int64
         - name: locale
           in: query
           description: Language of the message.

@@ -8,7 +8,7 @@ const requestOptions = {
     redirect: 'follow'
 };
 
-fetch(`https://status.adobe.io/api/v1/events?api_key=${API_KEY}&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>`, requestOptions)
+fetch(`https://status.adobe.io/api/v1/events?api_key=${API_KEY}&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&updateStart=<epoch>&updateEnd=<epoch>`, requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));

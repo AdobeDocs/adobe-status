@@ -27,6 +27,10 @@ module.exports = {
         path: '/api/index.md'
       },
       {
+        title: 'MCP Server',
+        path: '/mcp/'
+      },
+      {
         title: 'Support',
         path: '/support/'
       }
@@ -43,6 +47,18 @@ module.exports = {
       {
         title: 'Sample API Calls',
         path: '/guides/sample-api-calls/'
+      },
+      {
+        title: 'Get Started',
+        path: '/mcp/get-started/'
+      },
+      {
+        title: 'Tools Reference',
+        path: '/mcp/tools/'
+      },
+      {
+        title: 'Authentication',
+        path: '/mcp/authentication/'
       },
       {
         title: 'Overview',

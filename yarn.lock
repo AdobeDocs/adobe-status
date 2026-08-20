@@ -5054,10 +5054,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "adobe-status@workspace:."
   dependencies:
-
-
     "@adobe/gatsby-theme-aio": 4.14.17
-
     gatsby: 4.22.0
     react: ^17.0.2
     react-dom: ^17.0.2

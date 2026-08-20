@@ -28,7 +28,6 @@ Adobe Status MCP server supports two transports:
 * **stdio** — for local clients such as Claude Desktop or Cursor, run as a subprocess.
 * **streamable-http** — mounted at `/mcp` inside a FastAPI app, for shared/hosted deployments.
 
-
 See [Get Started](/adobe-status/mcp/get-started/) for installation and running the server, [Tools Reference](/adobe-status/mcp/tools/) for the full list of tools and parameters, and [Authentication](/adobe-status/mcp/authentication/) for how the subscription tools authenticate.
 
 <div style={{ height: '24px' }} />

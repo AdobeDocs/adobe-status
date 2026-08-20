@@ -17,6 +17,12 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
+  "overrides": {
+    "axios": "0.30.0"
+  },
+  "resolutions": {
+    "axios": "0.30.0"
+  },
   "scripts": {
     "start": "gatsby build && gatsby serve",
     "start:prefix": "gatsby build --prefix-paths && gatsby serve --prefix-paths",

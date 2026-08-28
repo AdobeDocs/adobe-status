@@ -7,7 +7,7 @@ description: Overview of the Adobe Status MCP server
 
 # Adobe Status MCP Server
 
-Query and act on Adobe Status data conversationally, using the [Model Context Protocol](https://modelcontextprotocol.io).
+Query and act on Adobe Status data<br/>conversationally, using the [Model Context Protocol](https://modelcontextprotocol.io).
 
 <Resources slots="heading, links"/>
 
@@ -19,9 +19,9 @@ Query and act on Adobe Status data conversationally, using the [Model Context Pr
 
 ## Overview
 
-The Adobe Status MCP server exposes Adobe Status data — public incidents and maintenance, the services registry, and per-user subscription management — as MCP tools, so an LLM client like Claude Desktop, Cursor, or a Slack bot can query and act on Adobe Status data.
+Adobe Status MCP server exposes Adobe Status data — incidents and maintenance, services registry, and user subscriptions — as MCP tools, so an LLM client like Claude Desktop, Cursor, or a Slack bot can query and act on Adobe Status data.
 
-It uses the same data that powers status.adobe.com and the Adobe Status API, and makes it available as callable tools instead of REST endpoints.
+Adobe Status MCP server uses the same data that powers status.adobe.com and the Adobe Status API, and makes it available as callable tools instead of REST endpoints.
 
 Adobe Status MCP server supports two transports:
 

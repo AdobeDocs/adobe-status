@@ -113,7 +113,7 @@ Public Adobe Status incidents and maintenance events, with filtering. Use `get_s
 | Parameter | Description |
 |---|---|
 | `event_id` | Filter by a specific event |
-| `event_type` | `incident` or `maintenance` |
+| `event_type` | `incident`, `maintenance`, or `announcement` |
 | `cloud_id` / `cloud_name` | Filter by cloud |
 | `product_id` / `product_name` | Filter by product |
 | `status` | Maintenance: `scheduled`/`started`/`completed`. Incidents: `opened`/`closed`/`dismissed` |

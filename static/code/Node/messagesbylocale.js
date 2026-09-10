@@ -4,9 +4,10 @@ const LOCALE = 'es'; // update needed locale
 
 const options = {
     'method': 'GET',
-    'url': `https://status.adobe.io/api/v1/messages/${LOCALE}?api_key=${API_KEY}`,
+    'url': `https://status.adobe.io/api/v1/messages/${LOCALE}`,
     'headers': {
-        'Authorization': 'Bearer <token>'
+        'Authorization': 'Bearer <token>',
+        'x-api-key': API_KEY
     }
 };
 request(options, function (error, response) {

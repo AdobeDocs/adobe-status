@@ -3,10 +3,11 @@ const API_KEY = '<key>';
 
 const options = {
     'method': 'GET',
-    'url': `https://status.adobe.io/api/v1/events/scheduled?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>`,
+    'url': `https://status.adobe.io/api/v1/event-subscriptions`,
     'headers': {
         'Authorization': 'Bearer <token>',
-        'x-api-key': API_KEY
+        'x-api-key': API_KEY,
+        'x-user-token': '<user_token>'
     }
 };
 request(options, function (error, response) {

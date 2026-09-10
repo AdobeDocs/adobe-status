@@ -218,8 +218,8 @@ paths:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/clouds?api_key=<key>&cloudId=<string>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/clouds?cloudId=<string>' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/clouds.js}
@@ -290,8 +290,8 @@ paths:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/products?api_key=<key>&cloudId=<string>&productId=<string>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/products?cloudId=<string>&productId=<string>' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/products.js}
@@ -338,8 +338,8 @@ paths:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/eventTypes?api_key=<key>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/eventTypes' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/eventtypes.js}
@@ -460,6 +460,11 @@ paths:
               - Scheduled
               - Started
               - Completed
+        - name: myEvents
+          in: query
+          description: Fetch list of events based on your entitlements and subscription preferences.
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -485,13 +490,17 @@ paths:
         '500':
           description: Internal Server Error
           content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          optional_user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
             curl --location --request GET
-            'https://status.adobe.io/api/v1/events?api_key=<key>&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&updateStart=<epoch>&updateEnd=<epoch>' \
-            --header 'Authorization: Bearer <token>'
+            'https://status.adobe.io/api/v1/events?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&updateStart=<epoch>&updateEnd=<epoch>&myEvents=<boolean>' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/event.js}
@@ -607,6 +616,11 @@ paths:
             enum:
               - Opened
               - Closed
+        - name: myEvents
+          in: query
+          description: Fetch list of events based on your entitlements and subscription preferences.
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -634,12 +648,16 @@ paths:
         '500':
           description: Internal Server Error
           content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          optional_user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/events/incidents?api_key=<key>&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/events/incidents?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&myEvents=<boolean>' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/incident.js}
@@ -755,6 +773,11 @@ paths:
               - Scheduled
               - Started
               - Completed
+        - name: myEvents
+          in: query
+          description: Fetch list of events based on your entitlements and subscription preferences.
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -782,12 +805,16 @@ paths:
         '500':
           description: Internal Server Error
           content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          optional_user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/events/maintenance?api_key=<key>&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/events/maintenance?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&myEvents=<boolean>' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/maintenance.js}
@@ -882,6 +909,11 @@ paths:
           description: Language of the message.
           schema:
             type: string
+        - name: myEvents
+          in: query
+          description: Fetch list of events based on your entitlements and subscription preferences.
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -909,12 +941,16 @@ paths:
         '500':
           description: Internal Server Error
           content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          optional_user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/events/scheduled?api_key=<key>&cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/events/scheduled?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&myEvents=<boolean>' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/scheduled.js}
@@ -969,6 +1005,11 @@ paths:
           description: Language of the message.
           schema:
             type: string
+        - name: myEvents
+          in: query
+          description: Fetch list of events based on your entitlements and subscription preferences.
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -996,12 +1037,16 @@ paths:
         '500':
           description: Internal Server Error
           content: {}
+      security:
+        - Authorization: [ ]
+          api_key: [ ]
+          optional_user_token: [ ]
       x-codeSamples:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/events/announcements?api_key=<key>&cloudIds=<string>&from=<date>&productIds=<string>&search=<string>&to=<date>&locale=<string>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/events/announcements?cloudIds=<string>&from=<date>&productIds=<string>&search=<string>&to=<date>&locale=<string>&myEvents=<boolean>' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/announcements.js}
@@ -1046,8 +1091,8 @@ paths:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/regions?api_key=<key>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/regions' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/regions.js}
@@ -1094,8 +1139,8 @@ paths:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/locales?api_key=<key>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/locales' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/locales.js}
@@ -1148,8 +1193,8 @@ paths:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/messages?api_key=<key>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/messages' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/messages.js}
@@ -1211,8 +1256,8 @@ paths:
         - lang: cURL
           label: CLI
           source: >-
-            curl --location --request GET 'https://status.adobe.io/api/v1/messages/es?api_key=<key>' \
-            --header 'Authorization: Bearer <token>'
+            curl --location --request GET 'https://status.adobe.io/api/v1/messages/es' \
+            --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>'
         - lang: JavaScript
           label: JavaScript
           source: {$ref: code/JS/messagesbylocale.js}
@@ -2115,5 +2160,20 @@ components:
     api_key:
       type: apiKey
       description: Use the api key `StatusAdobeIOClient`
-      name: api_key
-      in: query
+      name: x-api-key
+      in: header
+    user_token:
+      type: apiKey
+      description: >-
+        [To generate token for user-specific
+        access](https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/implementation/)
+      name: x-user-token
+      in: header
+    optional_user_token:
+      type: apiKey
+      description: >-
+        To fetch events based on user entitlements using myEvents parameter.<br />
+        [To generate token for user-specific
+        access](https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/implementation/)
+      name: x-user-token
+      in: header

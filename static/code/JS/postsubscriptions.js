@@ -3,9 +3,10 @@ myHeaders.append("Authorization", "Bearer <token>");
 myHeaders.append("Content-Type", "application/json");
 myHeaders.append("x-user-token", "<user_token>");
 const API_KEY = '<key>';
+myHeaders.append("x-api-key", API_KEY);
 
 const rawJsonBody = '<json_payload>';
-const url = `https://status.adobe.io/api/v1/subscriptions?api_key=${API_KEY}`;
+const url = `https://status.adobe.io/api/v1/subscriptions`;
 
 const requestOptions = {
     method: 'POST',

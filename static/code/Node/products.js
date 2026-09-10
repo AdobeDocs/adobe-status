@@ -3,9 +3,10 @@ const API_KEY = '<key>';
 
 const options = {
     'method': 'GET',
-    'url': `https://status.adobe.io/api/v1/products?api_key=${API_KEY}&cloudId=<string>&productId=<string>`,
+    'url': `https://status.adobe.io/api/v1/products?cloudId=<string>&productId=<string>`,
     'headers': {
-        'Authorization': 'Bearer <token>'
+        'Authorization': 'Bearer <token>',
+        'x-api-key': API_KEY
     }
 };
 request(options, function (error, response) {

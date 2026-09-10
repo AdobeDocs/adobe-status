@@ -3,9 +3,10 @@ const API_KEY = '<key>';
 
 const options = {
     'method': 'GET',
-    'url': `https://status.adobe.io/api/v1/event-subscriptions?api_key=${API_KEY}`,
+    'url': `https://status.adobe.io/api/v1/event-subscriptions`,
     'headers': {
         'Authorization': 'Bearer <token>',
+        'x-api-key': API_KEY,
         'x-user-token': '<user_token>'
     }
 };

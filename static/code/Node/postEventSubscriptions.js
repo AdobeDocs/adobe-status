@@ -1,7 +1,7 @@
 const request = require('request');
 
 const API_KEY = '<key>';
-const url = `https://status.adobe.io/api/v1/event-subscriptions?api_key=${API_KEY}&eventId=<string>&productId=<string>`;
+const url = `https://status.adobe.io/api/v1/event-subscriptions?eventId=<string>&productId=<string>`;
 
 const postData = '<json_payload>';
 
@@ -10,6 +10,7 @@ const options = {
     'url': url,
     'headers': {
         'Authorization': 'Bearer <token>',
+        'x-api-key': API_KEY,
         'x-user-token': '<user_token>'
     }
 };

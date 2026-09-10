@@ -1,13 +1,14 @@
 const request = require('request');
 
 const API_KEY = '<key>';
-const url = `https://status.adobe.io/api/v1/subscriptions?api_key=${API_KEY}&productIds=<string>`;
+const url = `https://status.adobe.io/api/v1/subscriptions?productIds=<string>`;
 
 const options = {
     'method': 'DELETE',
     'url': url,
     'headers': {
         'Authorization': 'Bearer <token>',
+        'x-api-key': API_KEY,
         'x-user-token': '<user_token>'
     }
 };

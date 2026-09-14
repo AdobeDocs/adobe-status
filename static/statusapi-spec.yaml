@@ -487,7 +487,7 @@ paths:
           label: CLI
           source: >-
             curl --location --request GET
-            'https://status.adobe.io/api/v1/events?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>' \
+            'https://status.adobe.io/api/v1/events?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&myEvents=<boolean>' \
             --header 'Authorization: Bearer <token>' --header 'x-api-key: <key>' --header 'x-user-token: <user_token>'
         - lang: JavaScript
           label: JavaScript
@@ -3075,7 +3075,7 @@ components:
     optional_user_token:
       type: apiKey
       description: >-
-        To fetch events based on user entitlements.<br />
+        To fetch events based on user entitlements using myEvents parameter.<br />
         [To generate token for user-specific
         access](https://developer.adobe.com/developer-console/docs/guides/authentication/UserAuthentication/implementation/)
       name: x-user-token

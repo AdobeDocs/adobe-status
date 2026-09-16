@@ -1,16 +1,19 @@
 const request = require('request');
+
 const API_KEY = '<key>';
+const url = `https://status.adobe.io/api/v1/event-subscriptions?eventId=<string>&productId=<string>`;
 
 const options = {
-    'method': 'GET',
-    'url': `https://status.adobe.io/api/v1/events/maintenance?cloudIds=<string>&environmentIds=<string>&from=<date>&offeringIds=<string>&productIds=<string>&regionIds=<string>&search=<string>&serviceIds=<string>&to=<date>&myEvents=<boolean>`,
+    'method': 'DELETE',
+    'url': url,
     'headers': {
         'Authorization': 'Bearer <token>',
         'x-api-key': API_KEY,
         'x-user-token': '<user_token>'
     }
 };
+
 request(options, function (error, response) {
     if (error) throw new Error(error);
-    console.log(response.body);
+    console.log(response.body); // Log the response body
 });
